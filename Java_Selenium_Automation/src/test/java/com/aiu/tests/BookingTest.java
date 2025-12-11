@@ -98,15 +98,10 @@ public class BookingTest extends TestBase {
 
         // Cancel booking if available
         if (bookingsPage.areBookingsDisplayed()) {
-            int initialCount = bookingsPage.getBookingCount();
             bookingsPage.cancelFirstBooking();
             
-            // Wait for page to refresh
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            // Wait for page to refresh - wait for staleness or page reload
+            com.aiu.utils.TestUtils.waitForPageLoad(driver);
             
             logPass("Cancel booking action completed");
         } else {

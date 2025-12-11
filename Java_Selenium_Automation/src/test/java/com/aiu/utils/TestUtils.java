@@ -80,13 +80,13 @@ public class TestUtils {
     }
 
     /**
-     * Wait for page to load
+     * Wait for page to load using document ready state
      */
     public static void waitForPageLoad(WebDriver driver) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(ConfigReader.getExplicitWait()));
+        wait.until(webDriver -> 
+            ((org.openqa.selenium.JavascriptExecutor) webDriver)
+                .executeScript("return document.readyState").equals("complete")
+        );
     }
 }
