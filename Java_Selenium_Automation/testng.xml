@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="AIU Trips & Events - Automation Test Suite" parallel="false" thread-count="1" verbose="1">
+    
+    <listeners>
+        <!-- Add custom listeners here if needed -->
+    </listeners>
+
+    <test name="Login Tests" preserve-order="true">
+        <classes>
+            <class name="com.aiu.tests.LoginTest"/>
+        </classes>
+    </test>
+
+    <test name="Event Tests" preserve-order="true">
+        <classes>
+            <class name="com.aiu.tests.EventTest"/>
+        </classes>
+    </test>
+
+    <test name="Booking Tests" preserve-order="true">
+        <classes>
+            <class name="com.aiu.tests.BookingTest"/>
+        </classes>
+    </test>
+
+</suite>
