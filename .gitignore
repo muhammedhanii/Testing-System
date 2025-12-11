@@ -48,3 +48,30 @@ Selenium_Automation_Tests/.pytest_cache/
 *.bak
 test.xlsx
 *_Part1.xlsx
+
+# Java
+*.class
+*.jar
+!**/maven-wrapper.jar
+*.war
+*.ear
+*.iml
+.idea/
+.classpath
+.project
+.settings/
+bin/
+target/
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Java Selenium Automation
+Java_Selenium_Automation/test-output/
+Java_Selenium_Automation/target/
+Java_Selenium_Automation/.classpath
+Java_Selenium_Automation/.project
+Java_Selenium_Automation/.settings/
+Java_Selenium_Automation/*.iml
