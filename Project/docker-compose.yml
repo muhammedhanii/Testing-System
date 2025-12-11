@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: aiu-trips-db-main
+    environment:
+      POSTGRES_DB: tripsdb
+      POSTGRES_USER: aiu_user
+      POSTGRES_PASSWORD: aiu_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_main:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aiu_user -d tripsdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aiu-network-main
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aiu-trips-backend-main
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/tripsdb
+      SPRING_DATASOURCE_USERNAME: aiu_user
+      SPRING_DATASOURCE_PASSWORD: aiu_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      JWT_SECRET: yourSecretKeyForJWTTokenGenerationPleaseChangeInProduction
+      JWT_EXPIRATION: 86400000
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - aiu-network-main
+    restart: unless-stopped
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: aiu-trips-frontend-main
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - aiu-network-main
+    restart: unless-stopped
+
+volumes:
+  postgres_data_main:
+    driver: local
+
+networks:
+  aiu-network-main:
+    driver: bridge
